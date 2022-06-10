@@ -6,6 +6,18 @@ showtext_auto()
 my_pink <<- c("#42BFDD", "#BBE6E4", "#F0F6F6", lighten("#FF66B3", 0.4), "#FF66B3")
 d10 <<- c("#788FCE", "#BD8184", "#E6956F", "#F2CC8F", "#A6BA96", "#C5E8E3", "#F4F1DE", "#CDC3D4", "#A88AD2", "#60627C")
 
+# rich wrap
+str_rich_wrap <- function(x, n, pattern = "XZ") {
+  parts <- str_extract_all(x, "<.*?>")[[1]]
+  x1 <- str_replace_all(x, "<.*?>", pattern)
+  x2 <- str_wrap(x1, n)
+  for(k in parts) {
+    x2 <- str_replace(x2, pattern, k)
+  }
+  str_replace_all(x2, "\\n", "<br>")
+}
+
+
 # geom_rrect
 # taken from hrbrmstr/statebins
 geom_rrect <- function(mapping = NULL, data = NULL,
