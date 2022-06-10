@@ -1,6 +1,10 @@
 
 library(tidyverse)
 library(ggchicklet)
+library(ggbump)
+library(ggtext)
+
+source("tools/startup.R")
 
 txt_col <- "white"
 bg <- "grey20"
@@ -105,7 +109,7 @@ g_time <- survivoR::advantage_details |>
   )
 
 g_time
-ggsave("images/random/advantages/time.png", height = 8, width = 8)
+ggsave("time.png", height = 8, width = 8)
 
 
 # legend for above --------------------------------------------------------
@@ -152,7 +156,7 @@ g_leg <- survivoR::advantage_details |>
   )
 
 g_leg
-ggsave("images/random/advantages/legend.png", height = 7, width = 7)
+ggsave("legend.png", height = 7, width = 7)
 
 # success ---------------------------------------------------------------
 
@@ -221,7 +225,7 @@ g_success <- df_base |>
   )
 
 g_success
-ggsave("images/random/advantages/success.png", height = 8, width = 8)
+ggsave("success.png", height = 8, width = 8)
 
 # base function -----------------------------------------------------------
 
@@ -281,7 +285,7 @@ subtitle <- str_rich_wrap(
 g_base <- ggbase(title, subtitle, size = 92, x = 0, x_sub = 0, y_sub = 23, size_sub = 20,
                  ft_title = "survivor", ft_sub = "oswald")
 
-ggsave("images/random/advantages/base.png", height = 12, width = 24)
+ggsave("base.png", height = 12, width = 24)
 
 # changed hands charts ----------------------------------------------------------
 
@@ -373,7 +377,7 @@ g_changed <- df_changed_bar |>
 
 g_changed
 
-ggsave("images/random/advantages/changed-hands.png", height = 8, width = 8)
+ggsave("changed-hands.png", height = 8, width = 8)
 
 # location ----------------------------------------------------------------
 
@@ -433,7 +437,7 @@ g_location
 
 
 df_clue <- survivoR::advantage_details |>
-  filter(str_sub(advantage_id, 9, 9) == "") |>
+  filter(!str_detect(advantage_id, "b")) |>
   mutate(
     clue_details = ifelse(
       clue_details %in% c("Found without clue", "No clue existed"),
@@ -484,7 +488,7 @@ g_location /
     )
   )
 
-ggsave("images/random/advantages/location.png", height = 6, width = 6)
+ggsave("location.png", height = 6, width = 6)
 
 
 
@@ -527,7 +531,7 @@ g_when_played <- df_base |>
   )
 
 g_when_played
-ggsave("images/random/advantages/when-played.png", height = 8, width = 8)
+ggsave("when-played.png", height = 8, width = 8)
 
 
 # join --------------------------------------------------------------------
@@ -548,4 +552,4 @@ g_base +
     )
   )
 
-ggsave("images/random/advantages/complete.png", height = 13, width = 24)
+ggsave("complete.png", height = 13, width = 24)
