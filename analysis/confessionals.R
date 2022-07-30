@@ -14,6 +14,8 @@ library(ggstream)
 
 bg <- "grey20"
 txt_col <- "white"
+triangle_col <- "grey30"
+tree_cols <- c("grey30", "grey40")
 
 pal <- c(my_pink[3], darken(my_pink[1], 0.5), darken(my_pink[5], 0.5), my_pink[1], my_pink[2], my_pink[5], my_pink[4])
 names(pal) <- c("Total", "Male", "Female", "White Male", "POC Male", "White Female", "POC Female")
@@ -156,7 +158,7 @@ The mean edit percentage is equivalent for race within each gender."
 g_pred <- df_pred |>
   ggplot(aes(demographic, draw, colour = demographic, fill = demographic)) +
   geom_hline(yintercept = 1, colour = txt_col, linetype = 3) +
-  geom_jitter(width = 0.2,  alpha = 0.05) +
+  geom_jitter(width = 0.3,  alpha = 0.05) +
   geom_segment(aes(y = 1, yend = median, x = demographic, xend = demographic), df_med_line, colour = txt_col) +
   geom_point(aes(x = demographic, y = median), df_med_line, size = 10, colour = txt_col) +
   geom_point(aes(x = demographic, y = median, colour = demographic), df_med_line, size = 9) +
@@ -186,13 +188,13 @@ g_pred <- df_pred |>
   ) +
   theme_void() +
   theme(
-    text = element_text(family = ft_text, colour = "white", size = 40, lineheight = 0.3),
+    text = element_text(family = ft_text, colour = txt_col, size = 40, lineheight = 0.3),
     axis.title.x = element_text(lineheight = 0.3, margin = margin(t = 5)),
     axis.text = element_text(lineheight = 0.3, margin = margin(t = 5)),
-    axis.ticks = element_line(colour = "grey20"),
+    axis.ticks = element_line(colour = txt_col),
     plot.title = element_text(hjust = 0, lineheight = 0.3),
     plot.subtitle = element_text(hjust = 0, lineheight = 0.16, size = 48, margin = margin(b = 20)),
-    plot.background = element_rect(fill = "grey20", colour = bg),
+    plot.background = element_rect(fill = bg, colour = bg),
     plot.margin = margin(t = 30, l = 30, r = 30, b = 30),
     legend.position = "none"
   )
@@ -204,9 +206,11 @@ title <- "SURVIVOR: CONFESSIONALS"
 subtitle <- str_wrap(
   "Confessional counts loosely represent a players screen time where they talk strategy
 and replay events. It is an imperfect measure, but can indicate success in the game.
-This is a detailed summary of confessionals<br>and an analysis of the edit for key demographics", 180)
-g_base <- ggbase(title, subtitle, size = 92, x = 0, x_sub = 0, y_sub = 23.2, size_sub = 20,
-                 ft_title = "survivor", ft_sub = ft_text, title_col = lighten(pal["POC Female"], 0.5))
+This is a summary of the confessionals data<br>and an analysis of the edit for key demographics", 180)
+g_base <- ggbase(
+  title, subtitle, size = 92, x = 0, x_sub = 0, y_sub = 23.2, size_sub = 20, bg_col = bg,
+  ft_title = "survivor", ft_sub = ft_text, title_col = lighten(pal["POC Female"], 0.5)
+)
 
 
 # 📦 total and edit boxes --------------------------------------------------
@@ -290,7 +294,7 @@ g_top_30 <-df_total_30 |>
 
   # edit
   geom_rrect(aes(xmin = b-c, xmax = b + c, ymin = y-0.45, ymax = y+0.45, fill = total)) +
-  geom_text(aes(x = b, y = y, label = total, colour = gender_poc), size = 12, family = ft_text, colour = bg) +
+  geom_text(aes(x = b, y = y, label = total, colour = gender_poc), size = 12, family = ft_text, colour = "grey20") +
 
   scale_fill_gradientn(colours = prgr_div[8:12]) +
   scale_colour_gradientn(colours = prgr_div[8:12]) +
@@ -299,7 +303,7 @@ g_top_30 <-df_total_30 |>
   new_scale_colour() +
 
   geom_rrect(aes(xmin = b+a-c, xmax = b+a + c, ymin = y-0.45, ymax = y+0.45, fill = edit_index), df_edit_30) +
-  geom_text(aes(x = b+a, y = y, label = edit_pct), df_edit_30, colour = bg, size = 12, family = ft_text) +
+  geom_text(aes(x = b+a, y = y, label = edit_pct), df_edit_30, colour = "grey20", size = 12, family = ft_text) +
 
   annotate("text", x = 0, y = 41, label = "Total confessional count", family = ft_text, size = 16, colour = txt_col, hjust = 0) +
   annotate("text", x = a, y = 41, label = "Edit (%)", family = ft_text, size = 16, colour = txt_col, hjust = 0) +
@@ -319,12 +323,10 @@ the number of episodes. Early boots are adjusted for low data"
   ) +
   theme_void() +
   theme(
-    text = element_text(family = ft_text, colour = "white", size = 48, lineheight = 0.3),
+    text = element_text(family = ft_text, colour = txt_col, size = 48, lineheight = 0.3),
     axis.text.y = element_text(lineheight = 0.3, margin = margin(t = 5)),
-    axis.ticks = element_line(colour = "grey20"),
-    # plot.title = element_text(hjust = 0, lineheight = 0.3),
     plot.subtitle = element_text(hjust = 0, lineheight = 0.16),
-    plot.background = element_rect(fill = "grey20", colour = bg),
+    plot.background = element_rect(fill = bg, colour = bg),
     plot.margin = margin(t = 30, l = 30, r = 30, b = 30),
     legend.position = "none"
   )
@@ -349,11 +351,10 @@ g_points <- df_points |>
   ) +
   theme_void() +
   theme(
-    text = element_text(family = ft_text, colour = "white", size = 48, lineheight = 0.3),
+    text = element_text(family = ft_text, colour = txt_col, size = 48, lineheight = 0.3),
     axis.text = element_text(lineheight = 0.3, margin = margin(t = 5)),
-    axis.ticks = element_line(colour = "grey20"),
     plot.title = element_text(hjust = 0, lineheight = 0.3),
-    plot.background = element_rect(fill = "grey20", colour = bg),
+    plot.background = element_rect(fill = bg, colour = bg),
     plot.margin = margin(t = 30, l = 30, r = 30, b = 30),
     legend.position = "none"
   )
@@ -437,13 +438,13 @@ df_tree_text <- tribble(
 d <- 0.5
 g_tree <- ggplot() +
   geom_line(aes(x, y, group = id), df_bump2, linetype = 3, colour = txt_col) +
-  geom_chicklet(aes(x = 5, y = n), df_bubble[["all"]], fill = "grey30", colour = txt_col, radius = grid::unit(8, "pt")) +
-  geom_chicklet(aes(x = 2.5, y = n), df_bubble[["gender"]], radius = grid::unit(8, "pt"), fill = "grey40") +
-  geom_chicklet(aes(x = 0, y = n, fill = gender_poc), df_bubble[["gender_poc"]], radius = grid::unit(8, "pt")) +
+  geom_chicklet(aes(x = 5, y = n), df_bubble[["all"]], fill = tree_cols[1], colour = txt_col, radius = grid::unit(8, "pt")) +
+  geom_chicklet(aes(x = 2.5, y = n), df_bubble[["gender"]], radius = grid::unit(8, "pt"), fill = tree_cols[2], colour = txt_col) +
+  geom_chicklet(aes(x = 0, y = n, fill = gender_poc), df_bubble[["gender_poc"]], radius = grid::unit(8, "pt"), colour = txt_col) +
   geom_text(aes(x, y, label = label), df_tree_text, family = ft_text, size = 14, lineheight = 0.3, colour = txt_col) +
   annotate("point", x = -0.45, y = 2347/2, colour = txt_col, size = 4) +
   annotate("point", x = -0.45, y = 2347 + 5573 + 2344/2, colour = txt_col, size = 4) +
-  annotate("richtext", x = 6.6, y = 0, label = title_text_bubble, family = ft_text, size = 16,
+  annotate("richtext", x = 6.6, y = 0, label = title_text_bubble, family = ft_text, size = 18,
            colour = txt_col, label.color = NA, fill = NA, lineheight = 0.35, hjust = 0) +
   scale_fill_manual(
     values = pal,
@@ -457,10 +458,9 @@ g_tree <- ggplot() +
   coord_flip(clip = "off") +
   theme_void() +
   theme(
-    text = element_text(family = ft_text, colour = "white", size = 48, lineheight = 0.3),
-    axis.ticks = element_line(colour = "grey20"),
+    text = element_text(family = ft_text, colour = txt_col, size = 48, lineheight = 0.3),
     plot.title = element_text(hjust = 0, lineheight = 0.3),
-    plot.background = element_rect(fill = "grey20", colour = bg),
+    plot.background = element_rect(fill = bg, colour = bg),
     plot.margin = margin(t = 30, l = 30, r = 30, b = 30),
     legend.position = "none"
   )
@@ -493,12 +493,10 @@ g_hist <- df_total |>
   coord_cartesian(clip = "off") +
   theme_void() +
   theme(
-    text = element_text(family = ft_text, colour = "white", size = 48, lineheight = 0.3),
+    text = element_text(family = ft_text, colour = txt_col, size = 48, lineheight = 0.3),
     axis.text.x = element_text(lineheight = 0.3, margin = margin(t = 5)),
-    # axis.title.y = element_text(lineheight = 0.4, angle = 90),
-    axis.ticks = element_line(colour = "grey20"),
     plot.title = element_text(hjust = 0, lineheight = 0.3),
-    plot.background = element_rect(fill = "grey20", colour = bg),
+    plot.background = element_rect(fill = bg, colour = bg),
     plot.margin = margin(t = 30, l = 30, r = 30, b = 30),
     legend.position = "none"
   )
@@ -509,8 +507,8 @@ g_hist <- df_total |>
 top_right <-
   "Takeaways:\n
     • Boston Rob has the most confessionals\n
-    • Devens has the most favourable edit\n
-    • Hantz has the second most confessionals but also the second most\n
+    • Rick Devens has the most favourable edit\n
+    • Russell Hantz has the second most confessionals but also the second most\n
       favourable edit\n
     • Only 7 people appear in both the top 40 total confessionals and top\n
       40 edits\n\n
@@ -557,14 +555,14 @@ g_triangle <- tribble(
   0, 0
 ) |>
   ggplot(aes(x, y)) +
-  geom_polygon(fill = "grey30") +
+  geom_polygon(fill = triangle_col) +
   theme_void() +
   theme(plot.background = element_rect(fill = bg, colour = bg))
 
 # 🦴 join -----------------------------------------------------------------
 
 g_base +
-  inset_element(g_tree, bottom = 0.24, top = 0.875, left = 0.03, right = 0.28) +
+  inset_element(g_tree, bottom = 0.24, top = 0.875, left = 0.02, right = 0.28) +
   inset_element(g_top_30, bottom = -0.07, top = 0.9, left = 0.3, right = 0.66) +
   inset_element(g_pred, bottom = 0.3, top = 0.685, left = 0.695, right = 0.95) +
   inset_element(g_stream, bottom = 0.2, top = 0.28, left = 0.695, right = 0.95) +
@@ -577,7 +575,7 @@ g_base +
     caption = glue("Graphic: {get_icon('twitter', 10, fill = list(bg = bg, img = txt_col))} @danoehm / Data: available from the survivoR package on Github {get_icon('github', 10, fill = list(bg = bg, img = txt_col))} doehm/survivoR #rstats"),
     theme = theme(
       plot.background = element_rect(fill = bg, colour = bg),
-      plot.caption = element_markdown(size = 42, colour = txt_col, family = ft_text)
+      plot.caption = element_markdown(size = 42, colour = txt_col, family = ft_text, hjust = 0.95)
     )
   )
 
@@ -598,32 +596,3 @@ ggsave("images/random/confessionals/pred.png",
            )
          ),
        height = 8, width = 6)
-
-
-
-# random stats ------------------------------------------------------------
-
-survivoR::castaways |>
-  distinct(version_season, castaway_id) |>
-  count(castaway_id) |>
-  transmute(
-    castaway_id,
-    multiple_seasons = n > 1
-  ) |>
-  left_join(df_total) |>
-  filter(n >= 50) |>
-  count(multiple_seasons)
-
-survivoR::confessionals |>
-  filter(version == "US") |>
-  # group_by(castaway_id) |>
-  summarise(mean = mean(confessional_count)) |>
-  ggplot(aes(mean)) +
-  geom_histogram(bins = 60)
-
-survivoR::confessionals |>
-  filter(version == "US") |>
-  group_by(season, castaway_id) |>
-  summarise(total = sum(confessional_count)) |>
-  ungroup() |>
-  summarise(mean = mean(total))
